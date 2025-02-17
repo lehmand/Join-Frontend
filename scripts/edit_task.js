@@ -8,6 +8,7 @@ async function openTaskDialog(id, index) {
   currentDialog.setAttribute("data-task-index", index);
   currentIndex = index;
   newTask = { ...boardTasks[currentIndex] };
+  console.log(newTask)
 
   renderDialog(index);
   openDialog(id, index);

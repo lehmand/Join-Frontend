@@ -166,6 +166,9 @@ async function changeTaskCategory(event) {
     })
     if(!response.ok){
       throw new Error('Failed updating category: ', response.status)
+    } else {
+      boardTasks = await getTasks()
+      renderBoard(boardTasks)
     }
   } catch(err){
     console.error(err)
