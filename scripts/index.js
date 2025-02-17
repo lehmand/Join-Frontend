@@ -65,8 +65,10 @@ async function doLogIn() {
  */
 async function logInAsGuest() {
   logInButton.disabled = true;
+  email = 'guest@test.com'
+  password = 'asdfasdf'
 
-  if (await logIn(null, null, true)) {
+  if (await logIn(email, password)) {
     showToast("You have been logged in successfully.");
     setTimeout(() => {
       window.location.href = "summary.html";
