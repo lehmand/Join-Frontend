@@ -8,12 +8,13 @@
  * @returns {string} The HTML template for the contact.
  */
 function contactTemplate(contact, i, color, firstLetters) {
+    console.log(contact)
 	return /*html*/ `
     <div class="contact-wrap" tabindex="${i}" onclick="renderInfo(${i})">
         <div class="avatar accent-1" style="background-color: ${color}" id="background${i}">${firstLetters}</div>
         <div class="contact-data">
             <span class="contact-name capitalize">${contact.name}
-                ${contact.user == getLoggedInUserId() ? '(You)' : ''}
+                ${(contact.user == getLoggedInUserId()) && (contact.name == getLoggedInUser()) ? '(You)' : ''}
             </span>
             <a href="mailto:${contact.email}" class="contact-email">${contact.email}</a>
         </div>

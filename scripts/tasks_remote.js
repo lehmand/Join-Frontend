@@ -8,6 +8,7 @@ async function getTasks() {
   try {
     const response = await fetch(url, {
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Token ${token}`
       },
     });

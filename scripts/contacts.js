@@ -162,14 +162,17 @@ async function addContact(endpoint, registeredUser) {
 		})
 		if(!response.ok){
 			throw new Error('Wrong response: ', response.status)
+		} else {
+			allContacts = await getContacts()
+			renderContacts(allContacts)
+			deleteValues()
+			closeCreateContact()
+			showToast('Contact added')
 		}
 	} catch(err) {
 		console.error('Adding contact failed: ', err)
 	}
 
-	deleteValues()
-	closeCreateContact()
-	showToast('Contact added')
 }
 
 /**

@@ -141,21 +141,29 @@ async function toggleSubtaskState(index) {
  */
 async function deleteTask() {
   let index = currentDialog.getAttribute("data-task-index");
-
-  const url = `http://127.0.0.1:8000/api/tasks/${boardTasks[index].id}/`
-  const token = getToken()
+  const url = `http://127.0.0.1:8000/api/tasks/${boardTasks[index].id}/`;
+  const token = getToken();
 
   try {
     const response = await fetch(url, {
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Token ${token}`
       },
       method: 'DELETE',
-    })
-  } catch(err) {
-    console.error('Deleting task failed: ', err)
+    });
+
+    if (response.ok) {
+      boardTasks = await getTasks()
+      renderBoard(boardTasks);
+      closeDialogForce();
+      showToast("Task deleted.");
+    } else {
+      console.error('Deleting task failed: ', response.statusText);
+    }
+  } catch (err) {
+    console.error('Deleting task failed: ', err);
   }
-  showToast("Task deleted.");
 }
 
 // EDIT TASK // EDIT TASK // EDIT TASK
@@ -586,11 +594,14 @@ async function saveEditTask() {
     if(!response.ok){
       const responseData = await response.json()
       throw new Error(`HTTP error! Status: ${responseData.message}`)
+    } else {
+      boardTasks = await getTasks()
+      renderBoard(boardTasks)
+      closeDialogForce()
+      showToast('Task edited')
     }
   } catch(err){
     console.error('Error saving edited task: ', err.message)
   }
 
-  closeDialogForce()
-  showToast('Task edited')
 }
