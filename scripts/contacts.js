@@ -378,7 +378,7 @@ async function deleteContact(index) {
  */
 async function updateContact(event, index) {
 	event.preventDefault();
-
+	console.log(index)
 	const updatedName = document.getElementById('edit-contact-name').value;
 	const updatedEmail = document.getElementById('edit-contact-email').value;
 	const updatedPhone = document.getElementById('edit-contact-phone').value;
@@ -401,12 +401,21 @@ async function updateContact(event, index) {
 			method: 'PATCH',
 			body: JSON.stringify(updatedContact)
 		})
+
+		if(response.ok) {
+			closeDeleteConfirmation()
+			closeEditContact()
+			allContacts = await getContacts()
+			renderContacts(allContacts)
+			showToast('Contact edited.');
+		} else {
+			throw new Error('Updating contact failed: ', error.message)
+		}
 	} catch(err) {
 		console.error('Updating contact failed: ', err)
 	}
-	closeDeleteConfirmation()
-	closeEditContact()
-	showToast('Contact edited.');
+
+	renderInfo(index)
 }
 
 

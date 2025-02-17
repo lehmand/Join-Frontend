@@ -8,7 +8,6 @@
  * @returns {string} The HTML template for the contact.
  */
 function contactTemplate(contact, i, color, firstLetters) {
-    console.log(contact)
 	return /*html*/ `
     <div class="contact-wrap" tabindex="${i}" onclick="renderInfo(${i})">
         <div class="avatar accent-1" style="background-color: ${color}" id="background${i}">${firstLetters}</div>
