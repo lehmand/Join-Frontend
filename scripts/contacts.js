@@ -361,13 +361,18 @@ async function deleteContact(index) {
 			},
 			method: 'DELETE',
 		})
+
+		if(response.ok) {
+			content.innerHTML = '';
+			closeDeleteConfirmation()
+			allContacts = await getContacts()
+			renderContacts(allContacts)
+			showToast('Contact deleted.');
+		}
 	} catch(err) {
 		console.error('Deleting contact failed: ', err)
 	}
 
-	content.innerHTML = '';
-	closeDeleteConfirmation()
-	showToast('Contact deleted.');
 }
 
 /**
