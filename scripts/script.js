@@ -239,27 +239,6 @@ async function closeDialog(event, button = false, currentIndex) {
     backdrop.classList.remove("fade-out");
     backdrop.classList.remove("show");
   }, 250);
-
-  const task = boardTasks[currentDialogIndex]
-  task.assignees_ids = task.assignees.map((assignee) => assignee.id)
-  delete task.assignees
-  
-  const url = `http://127.0.0.1:8000/api/tasks/${task.id}/`
-  const token = getToken()
-  
-
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': `Token ${token}`
-      },
-      method: 'PUT',
-      body: JSON.stringify(task)
-    })
-  } catch(err) {
-    console.error('Updating subtask failed')
-  }
 }
 
 function closeDialogForce() {

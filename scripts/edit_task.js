@@ -123,13 +123,36 @@ function renderTaskSubtasks(subtasks) {
 async function toggleSubtaskState(index) {
   const taskIndex = currentDialog.getAttribute("data-task-index");
   const subtaskIndex = index;
-  const currentState = boardTasks[taskIndex].subtasks[subtaskIndex].completed;
+  const task = boardTasks[taskIndex]
+  const subtask = task.subtasks[subtaskIndex]
 
+  subtask.completed = !subtask.completed
 
-  if (currentState) {
-    boardTasks[taskIndex].subtasks[subtaskIndex].completed = false;
-  } else {
-    boardTasks[taskIndex].subtasks[subtaskIndex].completed = true;
+  const payload = {
+    completed: subtask.completed,
+  }
+  
+  const url = `http://127.0.0.1:8000/api/subtasks/${subtask.id}/`
+  const token = getToken()
+  
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Token ${token}`
+      },
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to update subtask");
+    }
+
+    console.log("Subtask updated successfully");
+  } catch(err) {
+    console.error('Updating subtask failed')
   }
 
   renderBoard(boardTasks);
