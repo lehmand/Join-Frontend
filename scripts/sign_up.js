@@ -3,6 +3,7 @@
  * @returns {Promise<void>} A promise that resolves once the sign-up process is complete.
  */
 async function signUp() {
+  let passwordMatches = checkPasswords()
   let name = document.getElementById("name").value;
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
@@ -28,8 +29,8 @@ async function signUp() {
     color: color,
   }
 
-
-  const url = 'http://127.0.0.1:8000/api/contacts/'
+  if(passwordMatches) {
+    const url = 'http://127.0.0.1:8000/api/contacts/'
 
 	try {
 		const response = await fetch(url, {
@@ -51,6 +52,12 @@ async function signUp() {
   setTimeout(() => {
     window.location.href = 'index.html'
   }, 2500);
+  } else {
+    return false
+  }
+
+
+  
   
 }
 
