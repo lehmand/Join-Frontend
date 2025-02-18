@@ -15,17 +15,18 @@ function noTasksTemplate(message) {
  * @returns {string} HTML template for task card.
  */
 function taskCardTemplate(index, task, draggable) {
+  console.log(task)
   return `
     <div id="task-card-${index}" class="task-card draggable" data-draggable draggable="${draggable}" ondragstart="dragStart(event, this)" data-index="${index}" ondragend="dragEnd(this)" onclick="openTaskDialog('task-dialog', ${index})">
       <div class="card-body">
         <div class="card-category-changer">
           <div class="fw-bold">Move task to:</div>
-          ${taskCardChangeCategoryChangerTemplate(index, task.boardCategory)}
+          ${taskCardChangeCategoryChangerTemplate(index, task.board_category)}
           <div class="changer close" onclick="closeChangeTaskCategoryOnMobile(event, ${index})">Cancel</div>
         </div>
         <div class ="card-body-header">
-          <div class="label ${task.category === "User Story" ? "user-story" : "technical-task"}">
-              <span>${task.category === "User Story" ? "User Story" : "Technical Task"}</span>
+          <div class="label ${task.category === "user story" ? "user-story" : "technical-task"}">
+              <span>${task.category === "user story" ? "User Story" : "Technical Task"}</span>
           </div>
           <div class="category-changer" onclick="openChangeTaskCategoryOnMobile(event, ${index})">
             <img src="assets/icons/board_black.svg" width="24" height="24" />
