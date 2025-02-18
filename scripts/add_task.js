@@ -62,14 +62,14 @@ function addTaskDescription() {
 function addTaskAssignedTo() {
 	const checkBoxes = document.querySelectorAll('.add-task-checkbox');
 	assignedContacts = [];
-  let contactForTask = []
+	let contactForTask = [];
 
 	for (let i = 0; i < checkBoxes.length; i++) {
 		if (checkBoxes[i].checked) {
 			const value = checkBoxes[i].value;
-      const contacts = contactsToAssigned.find((contact) => contact.name == value);
+			const contacts = contactsToAssigned.find((contact) => contact.name == value);
 			assignedContacts.push(value);
-      contactForTask.push(contacts.id)
+			contactForTask.push(contacts.id);
 		}
 	}
 	addTaskShowAvatars();
@@ -137,7 +137,7 @@ function addTaskSubtasks(event) {
  */
 async function addTaskCreateTask() {
 	let tasks = await getTasks();
-	
+
 	const title = addTaskTitle();
 	const description = addTaskDescription();
 	const contactIds = addTaskAssignedTo();
@@ -159,13 +159,13 @@ async function addTaskCreateTask() {
 	};
 
 	const url = 'http://127.0.0.1:8000/api/tasks/';
-	const token = getToken()
+	const token = getToken();
 
 	try {
 		const response = await fetch(url, {
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': `Token ${token}`
+				Authorization: `Token ${token}`,
 			},
 			method: 'POST',
 			body: JSON.stringify(createdTask),

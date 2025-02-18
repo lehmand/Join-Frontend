@@ -207,8 +207,24 @@ function editTask() {
   editTaskChoseCategory(capitalizedCategory);
   editTaskRenderAssignedTo();
   editTaskInitPriorityButtons();
+  editTaskCheckBoxes(boardTasks[index]);
   editRenderTaskSubtasksList(boardTasks[index].subtasks);
   newTask.assignees_ids = boardTasks[index].assignees.map(assignee => assignee.id)
+}
+
+function editTaskCheckBoxes(task) {
+  const assigneeNames = task.assignees.map((assignee) => assignee.name)
+  const checkBoxes = document.querySelectorAll('.add-task-checkbox-edit')
+
+  checkBoxes.forEach((checkbox) => {
+    if(assigneeNames.includes(checkbox.value)) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
+  })
+  
+  
 }
 
 function editTaskInitPriorityButtons() {
@@ -307,7 +323,6 @@ function editTaskAssignedTo() {
       newTask.assignees.push(checkbox.value);
     }
   });
-  console.log(newTask)
   editTaskShowAvatars();
 }
 
