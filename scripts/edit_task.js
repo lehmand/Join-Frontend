@@ -295,20 +295,15 @@ function editTaskRenderAssignedTo() {
 
 function editTaskAssignedTo() {
   const checkBoxes = document.querySelectorAll(".add-task-checkbox-edit");
-  // Keep this as needed for your UI (e.g. for showing avatars)
   newTask.assignees = [];
-  // Create a separate array for storing the IDs
   newTask.assignees_ids = [];
 
   checkBoxes.forEach(checkbox => {
     if (checkbox.checked) {
-      // Find the corresponding contact by name in contactsToAssigned
       const contact = contactsToAssigned.find(c => c.name === checkbox.value);
       if (contact) {
-        // Store the ID in the assignees_ids array
         newTask.assignees_ids.push(contact.id);
       }
-      // Also push the checkbox value (e.g. the contact name) to newTask.assignees
       newTask.assignees.push(checkbox.value);
     }
   });
