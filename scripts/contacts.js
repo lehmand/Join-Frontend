@@ -135,9 +135,9 @@ async function addContact(endpoint, registeredUser) {
 	const name = getContactName();
 	const email = getContactEmail();
 	const phone = getContactPhone();
-	const initials = getnameFirstLetters(name)
-	const color = assignColor(name)
-	const currentUserId = getLoggedInUserId()
+	const initials = getnameFirstLetters(name);
+	const color = assignColor(name);
+	const currentUserId = getLoggedInUserId();
 
 	const contact = {
 		user: currentUserId,
@@ -145,34 +145,33 @@ async function addContact(endpoint, registeredUser) {
 		email: email,
 		phone: phone,
 		initials: initials,
-		color: color
+		color: color,
 	};
 
-	const url = `http://127.0.0.1:8000/api/${endpoint}/`
-	const token = getToken()
+	const url = `http://127.0.0.1:8001/api/${endpoint}/`;
+	const token = getToken();
 
 	try {
 		const response = await fetch(url, {
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': `Token ${token}`
+				Authorization: `Token ${token}`,
 			},
 			method: 'POST',
-			body: JSON.stringify(registeredUser || contact)
-		})
-		if(!response.ok){
-			throw new Error('Wrong response: ', response.status)
+			body: JSON.stringify(registeredUser || contact),
+		});
+		if (!response.ok) {
+			throw new Error('Wrong response: ', response.status);
 		} else {
-			allContacts = await getContacts()
-			renderContacts(allContacts)
-			deleteValues()
-			closeCreateContact()
-			showToast('Contact added')
+			allContacts = await getContacts();
+			renderContacts(allContacts);
+			deleteValues();
+			closeCreateContact();
+			showToast('Contact added');
 		}
-	} catch(err) {
-		console.error('Adding contact failed: ', err)
+	} catch (err) {
+		console.error('Adding contact failed: ', err);
 	}
-
 }
 
 /**
@@ -234,7 +233,7 @@ async function renderContacts(contacts) {
 
 	const usedLetters = new Set();
 
-	for (let i = 0; i < contacts.length; i++) {                              
+	for (let i = 0; i < contacts.length; i++) {
 		const contact = contacts[i];
 		const firstLetter = contact.name[0].toUpperCase();
 
@@ -349,30 +348,28 @@ function getnameFirstLetters(name) {
  */
 async function deleteContact(index) {
 	const content = document.getElementById('info-wrapper');
-	const url = `http://127.0.0.1:8000/api/contacts/${allContacts[index].id}/`
-	const token = getToken()
-
+	const url = `http://127.0.0.1:8001/api/contacts/${allContacts[index].id}/`;
+	const token = getToken();
 
 	try {
 		const response = await fetch(url, {
 			headers: {
-				"Content-Type": "application/json",
-				'Authorization': `Token ${token}`
+				'Content-Type': 'application/json',
+				Authorization: `Token ${token}`,
 			},
 			method: 'DELETE',
-		})
+		});
 
-		if(response.ok) {
+		if (response.ok) {
 			content.innerHTML = '';
-			closeDeleteConfirmation()
-			allContacts = await getContacts()
-			renderContacts(allContacts)
+			closeDeleteConfirmation();
+			allContacts = await getContacts();
+			renderContacts(allContacts);
 			showToast('Contact deleted.');
 		}
-	} catch(err) {
-		console.error('Deleting contact failed: ', err)
+	} catch (err) {
+		console.error('Deleting contact failed: ', err);
 	}
-
 }
 
 /**
@@ -383,7 +380,7 @@ async function deleteContact(index) {
  */
 async function updateContact(event, index) {
 	event.preventDefault();
-	console.log(index)
+	console.log(index);
 	const updatedName = document.getElementById('edit-contact-name').value;
 	const updatedEmail = document.getElementById('edit-contact-email').value;
 	const updatedPhone = document.getElementById('edit-contact-phone').value;
@@ -392,63 +389,60 @@ async function updateContact(event, index) {
 		name: updatedName,
 		email: updatedEmail,
 		phone: updatedPhone,
-	}
+	};
 
-	const url = `http://127.0.0.1:8000/api/contacts/${allContacts[index].id}/`
-	const token = getToken()
+	const url = `http://127.0.0.1:8001/api/contacts/${allContacts[index].id}/`;
+	const token = getToken();
 
 	try {
 		const response = await fetch(url, {
 			headers: {
-				"Content-Type": "application/json",
-				'Authorization': `Token ${token}`
+				'Content-Type': 'application/json',
+				Authorization: `Token ${token}`,
 			},
 			method: 'PATCH',
-			body: JSON.stringify(updatedContact)
-		})
+			body: JSON.stringify(updatedContact),
+		});
 
-		if(response.ok) {
-			closeDeleteConfirmation()
-			closeEditContact()
-			allContacts = await getContacts()
-			renderContacts(allContacts)
+		if (response.ok) {
+			closeDeleteConfirmation();
+			closeEditContact();
+			allContacts = await getContacts();
+			renderContacts(allContacts);
 			showToast('Contact edited.');
 		} else {
-			throw new Error('Updating contact failed: ', error.message)
+			throw new Error('Updating contact failed: ', error.message);
 		}
-	} catch(err) {
-		console.error('Updating contact failed: ', err)
+	} catch (err) {
+		console.error('Updating contact failed: ', err);
 	}
 
-	renderInfo(index)
+	renderInfo(index);
 }
 
-
 function showDeleteConfirmation(index) {
-	const ownerOfContact = allContacts[index].user
-	const currentUserId = getLoggedInUserId()
-	console.log(ownerOfContact)
-	console.log(currentUserId)
+	const ownerOfContact = allContacts[index].user;
+	const currentUserId = getLoggedInUserId();
+	console.log(ownerOfContact);
+	console.log(currentUserId);
 	let background = document.getElementById('delete-confirmation-bg');
-	let content = document.getElementById('delete-confirmation')
+	let content = document.getElementById('delete-confirmation');
 
 	background.classList.remove('d-none');
 	content.classList.remove('d-none');
-	content.classList.add('slight')
+	content.classList.add('slight');
 
 	content.innerHTML = '';
-	if(ownerOfContact == currentUserId) {
+	if (ownerOfContact == currentUserId) {
 		content.innerHTML += deleteConfirmationTemplate(index);
 	} else {
-		content.innerHTML += deleteNotAllowed()
+		content.innerHTML += deleteNotAllowed();
 	}
-
 }
-
 
 function closeDeleteConfirmation() {
 	let background = document.getElementById('delete-confirmation-bg');
-	let content = document.getElementById('delete-confirmation')
+	let content = document.getElementById('delete-confirmation');
 
 	background.classList.add('d-none');
 	content.classList.add('d-none');

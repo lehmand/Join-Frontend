@@ -8,10 +8,10 @@ let draggable = true;
  * @property {string} emptyMessage - The message to display when the category is empty.
  */
 let boardCategories = [
-  { name: "to-do", label: "To do", emptyMessage: "No tasks to do" },
-  { name: "in-progress", label: "In Progress", emptyMessage: "No tasks in progress" },
-  { name: "await-feedback", label: "Await feedback", emptyMessage: "No tasks awaiting feedback" },
-  { name: "done", label: "Done", emptyMessage: "No tasks are done" },
+	{ name: 'to-do', label: 'To do', emptyMessage: 'No tasks to do' },
+	{ name: 'in-progress', label: 'In Progress', emptyMessage: 'No tasks in progress' },
+	{ name: 'await-feedback', label: 'Await feedback', emptyMessage: 'No tasks awaiting feedback' },
+	{ name: 'done', label: 'Done', emptyMessage: 'No tasks are done' },
 ];
 
 /**
@@ -19,16 +19,16 @@ let boardCategories = [
  * @returns {Promise<void>} A promise that resolves when the initialization is complete.
  */
 async function initBoard() {
-  authGuard();
+	authGuard();
 
-  await init();
-  setNavActive("board");
-  boardTasks = await getTasks();
-  contactsToAssigned = await getContacts();
-  createAssignedTo();
+	await init();
+	setNavActive('board');
+	boardTasks = await getTasks();
+	contactsToAssigned = await getContacts();
+	createAssignedTo();
 
-  window.innerWidth <= 1150 ? (draggable = false) : (draggable = true);
-  renderBoard();
+	window.innerWidth <= 1150 ? (draggable = false) : (draggable = true);
+	renderBoard();
 }
 
 /**
@@ -36,22 +36,22 @@ async function initBoard() {
  * @param {Array} [tasks] - An optional array of tasks to render.
  */
 function renderBoard(tasks) {
-  if (!tasks) tasks = boardTasks;
+	if (!tasks) tasks = boardTasks;
 
-  boardCategories.forEach((category) => {
-    tasksContainer = document.getElementById(`tasks-${category.name}`);
-    tasksContainer.innerHTML = "";
+	boardCategories.forEach((category) => {
+		tasksContainer = document.getElementById(`tasks-${category.name}`);
+		tasksContainer.innerHTML = '';
 
-    filteredTasks = tasks.filter((task) => task.board_category === category.name);
+		filteredTasks = tasks.filter((task) => task.board_category === category.name);
 
-    if (filteredTasks.length === 0) {
-      tasksContainer.innerHTML = noTasksTemplate(category.emptyMessage);
-    } else {
-      tasksContainer.innerHTML += renderTasks(filteredTasks);
-    }
+		if (filteredTasks.length === 0) {
+			tasksContainer.innerHTML = noTasksTemplate(category.emptyMessage);
+		} else {
+			tasksContainer.innerHTML += renderTasks(filteredTasks);
+		}
 
-    tasksContainer.innerHTML += dropZoneTemplate(category.name);
-  });
+		tasksContainer.innerHTML += dropZoneTemplate(category.name);
+	});
 }
 
 /**
@@ -60,14 +60,14 @@ function renderBoard(tasks) {
  * @returns {string} HTML string representing the tasks.
  */
 function renderTasks(tasks) {
-  let html = "";
+	let html = '';
 
-  tasks.forEach((task) => {
-    let index = boardTasks.findIndex((obj) => obj === task);
-    html += taskCardTemplate(index, task, draggable);
-  });
+	tasks.forEach((task) => {
+		let index = boardTasks.findIndex((obj) => obj === task);
+		html += taskCardTemplate(index, task, draggable);
+	});
 
-  return html;
+	return html;
 }
 
 /**
@@ -75,19 +75,16 @@ function renderTasks(tasks) {
  * @param {HTMLElement} element - The input element containing the search query.
  */
 function searchTasks(element) {
-  let searchQuery = element.value.toLowerCase();
-  let filteredTasks = boardTasks.filter((task) => {
-    return (
-      task.title.toLowerCase().includes(searchQuery) ||
-      task.description.toLowerCase().includes(searchQuery)
-    );
-  });
+	let searchQuery = element.value.toLowerCase();
+	let filteredTasks = boardTasks.filter((task) => {
+		return task.title.toLowerCase().includes(searchQuery) || task.description.toLowerCase().includes(searchQuery);
+	});
 
-  filteredTasks.length === 0
-    ? element.parentElement.classList.add("has-error")
-    : element.parentElement.classList.remove("has-error");
+	filteredTasks.length === 0
+		? element.parentElement.classList.add('has-error')
+		: element.parentElement.classList.remove('has-error');
 
-  renderBoard(filteredTasks);
+	renderBoard(filteredTasks);
 }
 
 /* Draggable */
@@ -97,12 +94,12 @@ function searchTasks(element) {
  * @param {DragEvent} event - The drag start event.
  */
 function dragStart(event, element) {
-  if (!draggable) {
-    return event.preventDefault();
-  }
+	if (!draggable) {
+		return event.preventDefault();
+	}
 
-  element.classList.add("dragging");
-  event.dataTransfer.setData("elementIndex", element.attributes["data-index"].value);
+	element.classList.add('dragging');
+	event.dataTransfer.setData('elementIndex', element.attributes['data-index'].value);
 }
 
 /**
@@ -110,7 +107,7 @@ function dragStart(event, element) {
  * @param {HTMLElement} element - The element that was being dragged.
  */
 function dragEnd(element) {
-  element.classList.remove("dragging");
+	element.classList.remove('dragging');
 }
 
 /**
@@ -119,9 +116,9 @@ function dragEnd(element) {
  * @param {HTMLElement} element - The drop zone element.
  */
 function showDropZone(event, element) {
-  event.preventDefault();
-  if (event.currentTarget.contains(event.relatedTarget)) return;
-  element.classList.add("dragover");
+	event.preventDefault();
+	if (event.currentTarget.contains(event.relatedTarget)) return;
+	element.classList.add('dragover');
 }
 
 /**
@@ -130,8 +127,8 @@ function showDropZone(event, element) {
  * @param {HTMLElement} element - The drop zone element.
  */
 function hideDropZone(event, element) {
-  if (event.currentTarget.contains(event.relatedTarget)) return;
-  element.classList.remove("dragover");
+	if (event.currentTarget.contains(event.relatedTarget)) return;
+	element.classList.remove('dragover');
 }
 
 /**
@@ -139,40 +136,40 @@ function hideDropZone(event, element) {
  * @param {DragEvent} event - The drop event.
  */
 async function changeTaskCategory(event) {
-  event.preventDefault();
+	event.preventDefault();
 
-  let elementIndex = event.dataTransfer.getData("elementIndex");
-  let targetElement = event.currentTarget;
-  let category = targetElement.attributes["data-category"].value;
+	let elementIndex = event.dataTransfer.getData('elementIndex');
+	let targetElement = event.currentTarget;
+	let category = targetElement.attributes['data-category'].value;
 
-  hideDropZone(event, targetElement);
+	hideDropZone(event, targetElement);
 
-  const task = boardTasks[elementIndex]
-  task.board_category = category
-  task.assignees_ids = task.assignees.map((assignee) => assignee.id)
-  delete task.assignees
+	const task = boardTasks[elementIndex];
+	task.board_category = category;
+	task.assignees_ids = task.assignees.map((assignee) => assignee.id);
+	delete task.assignees;
 
-  const url = `http://127.0.0.1:8000/api/tasks/${task.id}/`
-  const token = getToken()
-  
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': `Token ${token}`
-      },
-      method: 'PUT',
-      body: JSON.stringify(task)
-    })
-    if(!response.ok){
-      throw new Error('Failed updating category: ', response.status)
-    } else {
-      boardTasks = await getTasks()
-      renderBoard(boardTasks)
-    }
-  } catch(err){
-    console.error(err)
-  }
+	const url = `http://127.0.0.1:8001/api/tasks/${task.id}/`;
+	const token = getToken();
+
+	try {
+		const response = await fetch(url, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Token ${token}`,
+			},
+			method: 'PUT',
+			body: JSON.stringify(task),
+		});
+		if (!response.ok) {
+			throw new Error('Failed updating category: ', response.status);
+		} else {
+			boardTasks = await getTasks();
+			renderBoard(boardTasks);
+		}
+	} catch (err) {
+		console.error(err);
+	}
 }
 
 /**
@@ -182,10 +179,10 @@ async function changeTaskCategory(event) {
  * @param {string} category - The new category for the task.
  */
 async function changeTaskCategoryOnMobile(event, index, category) {
-  event.stopPropagation();
+	event.stopPropagation();
 
-  boardTasks[index].board_category = category;
-  renderBoard();
+	boardTasks[index].board_category = category;
+	renderBoard();
 }
 
 /**
@@ -194,10 +191,10 @@ async function changeTaskCategoryOnMobile(event, index, category) {
  * @param {number} index - The index of the task for which the category change interface is opened.
  */
 async function openChangeTaskCategoryOnMobile(event, index) {
-  event.stopPropagation();
+	event.stopPropagation();
 
-  const taskCardElement = document.getElementById("task-card-" + index);
-  taskCardElement.children[0].children[0].style.display = "flex";
+	const taskCardElement = document.getElementById('task-card-' + index);
+	taskCardElement.children[0].children[0].style.display = 'flex';
 }
 
 /**
@@ -206,32 +203,32 @@ async function openChangeTaskCategoryOnMobile(event, index) {
  * @param {number} index - The index of the task for which the category change interface is closed.
  */
 async function closeChangeTaskCategoryOnMobile(event, index) {
-  event.stopPropagation();
+	event.stopPropagation();
 
-  const taskCardElement = document.getElementById("task-card-" + index);
-  taskCardElement.children[0].children[0].style.display = "none";
+	const taskCardElement = document.getElementById('task-card-' + index);
+	taskCardElement.children[0].children[0].style.display = 'none';
 }
 
 /**
  * Handles the window resize event and updates draggable elements accordingly.
  * @param {Event} event - The resize event.
  */
-addEventListener("resize", (event) => {
-  const width = event.target.innerWidth;
-  const draggableElements = document.querySelectorAll("[data-draggable]");
+addEventListener('resize', (event) => {
+	const width = event.target.innerWidth;
+	const draggableElements = document.querySelectorAll('[data-draggable]');
 
-  if (width <= 1150 && draggable) {
-    draggable = false;
-  } else if (width > 1150 && !draggable) {
-    draggable = true;
-  }
+	if (width <= 1150 && draggable) {
+		draggable = false;
+	} else if (width > 1150 && !draggable) {
+		draggable = true;
+	}
 
-  draggableElements.forEach((element) => {
-    element.setAttribute("draggable", draggable);
-  });
+	draggableElements.forEach((element) => {
+		element.setAttribute('draggable', draggable);
+	});
 });
 
 function openAddTaskDialog(id, category) {
-  globalBoardCategory = category;
-  openDialog(id);
+	globalBoardCategory = category;
+	openDialog(id);
 }
