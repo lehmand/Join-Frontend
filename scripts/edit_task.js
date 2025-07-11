@@ -36,9 +36,16 @@ function renderTaskCategory(category) {
 	const dialogCategoryElement = document.getElementById('dialog-show-category');
 
 	let className = category.replace(/\s+/g, '-').toLowerCase();
+	let splittedCategory = category.split(' ')
+
+	let correctedWords = splittedCategory.map((word) => {
+		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+	})
+
+	let correctedCategory = correctedWords.join(' ');
 
 	dialogCategoryContainer.classList.add(className);
-	dialogCategoryElement.innerHTML = category;
+	dialogCategoryElement.innerHTML = correctedCategory;
 }
 
 /**
